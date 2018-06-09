@@ -1,12 +1,14 @@
 {
   "name": "react-earth",
   "description": "",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/thekevinscott/react-earth",
   "license": "ISC",
   "main": "dist/index.js",
   "scripts": {
     "start": "parcel example/index.html --no-hmr",
+    "clean": "rm -rf ./dist",
+    "build": "npm run clean && parcel build src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kevin Scott",
