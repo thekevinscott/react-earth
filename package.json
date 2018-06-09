@@ -1,0 +1,21 @@
+{
+  "name": "globe",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "parcel example/index.html --no-hmr",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kevin Scott",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-react-app": "^3.1.1",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "three": "^0.83.0"
+  },
+  "devDependencies": {
+    "parcel": "^1.8.1"
+  }
+}

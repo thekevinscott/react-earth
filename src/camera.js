@@ -1,0 +1,9 @@
+import {
+  PerspectiveCamera,
+} from 'three';
+
+export default (width, height) => {
+  const camera = new PerspectiveCamera(70, width / height, 0.01, 10);
+  camera.position.z = 1;
+  return camera;
+};
