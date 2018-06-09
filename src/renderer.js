@@ -4,25 +4,24 @@ import {
 import getScene from './scene';
 import getCamera from './camera';
 
+let camera, renderer;
 export default async (node, props) => {
-  console.log('beginning render', node);
   if (!node) {
-    console.log('hey, you must supply a node');
     return;
   }
   const width = node.clientWidth;
   const height = node.clientHeight;
-  const renderer = new WebGLRenderer({
+
+  renderer = new WebGLRenderer({
     antialias: true,
+    alpha: true,
   });
+  renderer.setClearColor( 0x000000, 0 ); // the default
   renderer.setSize(width, height);
   node.appendChild( renderer.domElement );
 
-  console.log('get ready');
   const scene = await getScene(addRenderer, props);
-  console.log('get ready 2');
-  const camera = await getCamera(width, height);
-  console.log('get ready 3');
+  camera = await getCamera(width, height);
   render(() => {
     renderer.render(scene, camera);
   })();
@@ -41,23 +40,16 @@ const render = (callback) => () => {
   renderers.forEach(fn => fn());
   callback();
 }
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const resize = async (width, height) => {
+  if (renderer && camera) {
+    // console.log('resizing to', width, height);
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    return;
+  }
 
-// import {
-//   WebGLRenderer,
-// } from 'three';
-// import getScene from './scene';
-// import getCamera from './camera';
-
-// export default async node => {
-//   const width = node.clientWidth;
-//   const height = node.clientHeight;
-//   const renderer = new WebGLRenderer({
-//     antialias: true,
-//   });
-//   renderer.setSize(width, height);
-//   node.appendChild( renderer.domElement );
-
-//   const scene = await getScene();
-//   const camera = await getCamera(width, height);
-//   renderer.render(scene, camera);
-// };
+  await timeout(50);
+  return await resize(width, height);
+};

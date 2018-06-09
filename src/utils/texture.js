@@ -1,44 +1,37 @@
 import {
   Texture,
   TextureLoader,
-  NearestFilter,
-  LinearFilter,
+  // NearestFilter,
+  // LinearFilter,
 } from 'three';
 
-const progress = (e) => {
+const onProgress = (e) => {
   // TODO: Do something with this
 };
 
-const getTexture = async (path, options = {}) => {
-  const blob = new Blob([path], {type: "image/png"});
+const transformTexture = (texture, options) => Object.entries(options).reduce((obj, [key, value]) => {
+  obj[key] = value;
+  return obj;
+}, texture);
+
+export const loadTextureFromBuffer = async (buffer, options = {}) => {
+  const blob = new Blob([buffer], {type: "image/png"});
 
   const texture = new Texture();
-  // texture.repeat.x = - 1;
-  // texture.magFilter = NearestFilter;
-  // texture.minFilter = LinearFilter;
 
   createImageBitmap(blob).then(imageBitmap => {
     texture.image = imageBitmap;
     texture.needsUpdate = true;
-    Object.entries(options).forEach(([key, value]) => {
-      texture[key] = value;
-    });
+    transformTexture(texture, options);
   });
 
   return texture;
-
-  // return new Promise((resolve, reject) => {
-  //   return new TextureLoader().load(path, resolve, progress, err => {
-  //     return reject(new Error(`There was an error loading ${path}`));
-  //   });
-  // }).then(map => {
-  //   map.magFilter = NearestFilter;
-  //   map.minFilter = LinearFilter;
-  //   return map;
-  // }).then(map => Object.entries(options).reduce((obj, [key, value]) => {
-  //   obj[key] = value;
-  //   return obj;
-  // }, map));
 };
 
-export default getTexture;
+export const loadTextureFromUrl = async (url, options = {}) => new Promise((resolve, reject) => {
+  (new TextureLoader()).load(url, texture => {
+    return resolve(texture);
+  }, onProgress, err => {
+    return reject(`There was an error loading the texture ${url}`);
+  });
+}).then(texture => transformTexture(texture, options));

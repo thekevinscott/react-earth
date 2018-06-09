@@ -2,43 +2,83 @@ import fs from 'fs';
 import {
   Mesh,
   SphereGeometry,
+  MeshPhongMaterial,
+  Texture,
+  DoubleSide,
   MeshBasicMaterial,
   MeshNormalMaterial,
 } from 'three';
-import loadTexture from '../utils/texture';
-const textures = {
-  texture: fs.readFileSync(__dirname + '/../../assets/earthmap1k.jpg').buffer,
-  bump: fs.readFileSync(__dirname + '/../../assets/earthbump1k.jpg').buffer,
-  spec: fs.readFileSync(__dirname + '/../../assets/earthspec1k.jpg').buffer,
-  cloud: fs.readFileSync(__dirname + '/../../assets/earthcloudmap.jpg').buffer,
+import {
+  // loadTextureFromBuffer,
+  loadTextureFromUrl,
+} from '../utils/texture';
+
+// const textureBuffers = {
+//   texture: fs.readFileSync(__dirname + '/../../assets/earthmap1k.jpg').buffer,
+//   bump: fs.readFileSync(__dirname + '/../../assets/earthbump1k.jpg').buffer,
+//   spec: fs.readFileSync(__dirname + '/../../assets/earthspec1k.jpg').buffer,
+//   cloud: fs.readFileSync(__dirname + '/../../assets/earthcloudmap.jpg').buffer,
+// };
+
+const getDefaultTextures = ({ showClouds }) => {
+  const defaultTextures = {
+    map: 'https://thekevinscott.github.io/react-earth/assets/earthmap1k.jpg',
+    bumpMap: 'https://thekevinscott.github.io/react-earth/assets/earthbump1k.jpg',
+    specular: 'https://thekevinscott.github.io/react-earth/assets/earthspec1k.jpg',
+  };
+
+  if (showClouds) {
+    return {
+      ...defaultTextures,
+      cloud: 'https://thekevinscott.github.io/react-earth/assets/earthcloudmap.jpg',
+    };
+  }
+
+  return defaultTextures;
 };
+
+const loadTextures = (props) => Object.entries({
+  ...getDefaultTextures(props),
+  ...props.textures,
+}).reduce((promise, [key, val]) => promise.then(textures => {
+  return loadTextureFromUrl(val).then(texture => ({
+    ...textures,
+    [key]: texture,
+  }));
+}), Promise.resolve());
 
 export default async (props) => {
   const size = 50;
   const geometry = new SphereGeometry(0.5, size, size);
-  const map = await loadTexture(textures.texture);
-  const bumpMap = await loadTexture(textures.bump, {
-    bumpScale: 1.15,
-  });
-  // const specular = await Texture(spec);
-
-  // const material = new MeshNormalMaterial({
-  const material = new MeshBasicMaterial({
+  const {
     map,
     bumpMap,
-    // specular,
+    specular,
+    cloud,
+  } = await loadTextures(props);
+
+  const material = new MeshPhongMaterial({
+    map,
+    bumpMap,
+    bumpScale: props.bumpScale,
+    specular,
   });
-  material.flipY = false;
   const globe = new Mesh(geometry, material);
+  const cloudGeometry = new SphereGeometry(0.51, size, size)
+  const cloudMaterial = new MeshPhongMaterial({
+    map: cloud,
+    side: DoubleSide,
+    transparent : true,
+    depthWrite : false,
+    opacity: props.cloudOpacity,
+  })
+  var cloudMesh = new Mesh(cloudGeometry, cloudMaterial)
+  globe.add(cloudMesh);
 
   const speed = props.speed / 1000;
 
-  globe.rotation.x = 3.2;
-
   const render = () => {
-    globe.rotation.y += speed;
-    // globe.rotation.x += speed;
-    // console.log('x', globe.rotation.x);
+    globe.rotation.y -= speed;
   };
   return {
     globe,
