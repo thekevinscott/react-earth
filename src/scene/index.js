@@ -4,7 +4,7 @@ import {
 } from 'three';
 
 import light from './light';
-import getGlobe from './globe';
+import getGlobe, { update } from './globe';
 
 export default async (render, props) => {
   const scene = new Scene();
@@ -16,3 +16,5 @@ export default async (render, props) => {
 
   return scene;
 };
+
+export { update } from './globe';

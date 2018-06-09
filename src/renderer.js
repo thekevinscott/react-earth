@@ -1,7 +1,7 @@
 import {
   WebGLRenderer,
 } from 'three';
-import getScene from './scene';
+import getScene, { update } from './scene';
 import getCamera from './camera';
 
 let camera, renderer;
@@ -35,7 +35,7 @@ const addRenderer = {
 
 const renderers = [];
 
-const render = (callback) => () => {
+export const render = (callback) => () => {
   requestAnimationFrame(render(callback));
   renderers.forEach(fn => fn());
   callback();
@@ -53,3 +53,4 @@ export const resize = async (width, height) => {
   await timeout(50);
   return await resize(width, height);
 };
+export { update } from './scene';

@@ -6,7 +6,7 @@
   "license": "ISC",
   "main": "dist/index.js",
   "scripts": {
-    "start": "parcel example/index.html --no-hmr",
+    "run-example": "parcel example/index.html",
     "clean": "rm -rf ./dist",
     "build": "npm run clean && parcel build src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -30,6 +30,7 @@
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
+    "gh-pages": "^1.2.0",
     "parcel": "^1.8.1",
     "prop-types": "^15.6.1"
   }

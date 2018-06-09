@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import renderer, { resize } from './renderer';
+import renderer, { resize, update } from './renderer';
 
 class App extends Component {
   constructor(props) {
@@ -25,11 +25,18 @@ class App extends Component {
     }
   }
 
-  componentWillReceiveProps({ width, height }) {
+  componentWillReceiveProps(nextProps) {
+    const {
+      width,
+      height,
+    } = nextProps;
+
     if (width !== this.props.width || height !== this.props.height) {
       console.log('resize');
       resize(width, height);
     }
+
+    update(nextProps);
   }
 
   render() {

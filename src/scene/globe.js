@@ -47,7 +47,13 @@ const loadTextures = (props) => Object.entries({
   }));
 }), Promise.resolve());
 
-export default async (props) => {
+let props;
+let material;
+let globe;
+let cloudMesh;
+
+export default async (_props) => {
+  props = _props;
   const size = 50;
   const geometry = new SphereGeometry(0.5, size, size);
   const {
@@ -57,31 +63,48 @@ export default async (props) => {
     cloud,
   } = await loadTextures(props);
 
-  const material = new MeshPhongMaterial({
+  material = new MeshPhongMaterial({
     map,
     bumpMap,
     bumpScale: props.bumpScale,
     specular,
   });
-  const globe = new Mesh(geometry, material);
-  const cloudGeometry = new SphereGeometry(0.51, size, size)
-  const cloudMaterial = new MeshPhongMaterial({
-    map: cloud,
-    side: DoubleSide,
-    transparent : true,
-    depthWrite : false,
-    opacity: props.cloudOpacity,
-  })
-  var cloudMesh = new Mesh(cloudGeometry, cloudMaterial)
-  globe.add(cloudMesh);
+  globe = new Mesh(geometry, material);
 
-  const speed = props.speed / 1000;
+  if (props.showClouds) {
+    const cloudGeometry = new SphereGeometry(0.51, size, size)
+    const cloudMaterial = new MeshPhongMaterial({
+      map: cloud,
+      side: DoubleSide,
+      transparent : true,
+      depthWrite : false,
+      opacity: props.cloudOpacity,
+    })
+    cloudMesh = new Mesh(cloudGeometry, cloudMaterial)
+    globe.add(cloudMesh);
+  }
 
   const render = () => {
+    const speed = props.speed / 1000;
     globe.rotation.y -= speed;
   };
   return {
     globe,
     render,
   };
+};
+
+export const update = _props => {
+  if (JSON.stringify(props) !== JSON.stringify(_props)) {
+    globe.material.bumpScale = props.bumpScale;
+    cloudMesh.material.opacity = props.cloudOpacity;
+    globe.material.needsUpdate = true;
+    cloudMesh.material.needsUpdate = true;
+    if (props.showClouds === false && _props.showClouds === true) {
+      globe.add(cloudMesh);
+    } else if (props.showClouds === true && _props.showClouds === false) {
+      globe.remove(cloudMesh);
+    }
+    props = _props;
+  }
 };
