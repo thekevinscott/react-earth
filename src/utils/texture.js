@@ -20,6 +20,9 @@ const getTexture = async (path, options = {}) => {
   createImageBitmap(blob).then(imageBitmap => {
     texture.image = imageBitmap;
     texture.needsUpdate = true;
+    Object.entries(options).forEach(([key, value]) => {
+      texture[key] = value;
+    });
   });
 
   return texture;

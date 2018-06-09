@@ -1,7 +1,7 @@
 {
   "name": "react-earth",
   "description": "",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "homepage": "https://github.com/thekevinscott/react-earth",
   "license": "ISC",
   "main": "dist/index.js",
