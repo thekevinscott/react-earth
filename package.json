@@ -2,7 +2,7 @@
   "name": "globe",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "parcel example/index.html --no-hmr",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,11 +11,21 @@
   "license": "ISC",
   "dependencies": {
     "babel-preset-react-app": "^3.1.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "prop-types": "^15.6.1",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
     "three": "^0.83.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.2.3",
+    "eslint": "3.x",
+    "eslint-config-react-app": "^2.1.0",
+    "eslint-loader": "1.9.0",
+    "eslint-plugin-flowtype": "2.39.1",
+    "eslint-plugin-import": "2.8.0",
+    "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-react": "7.4.0",
     "parcel": "^1.8.1"
   }
 }

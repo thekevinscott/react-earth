@@ -18,11 +18,13 @@ import {
 } from 'three';
 
 import light from './light';
-import globe from './globe';
+import getGlobe from './globe';
 
-export default () => {
+export default async (render, props) => {
   const scene = new Scene();
 
+  const { globe, render: globeRender } = await getGlobe(props);
+  render.add(globeRender);
   scene.add(globe);
   scene.add(light);
 
