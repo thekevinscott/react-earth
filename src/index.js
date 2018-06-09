@@ -13,7 +13,15 @@ class App extends Component {
   setNode = node => {
     if (!this.node) {
       this.node = ReactDOM.findDOMNode(node);
+      this.renderGlobe();
+    }
+  }
+
+  renderGlobe = () => {
+    try {
       renderer(this.node, this.props);
+    } catch(err) {
+      console.log('err', err);
     }
   }
 
@@ -23,7 +31,13 @@ class App extends Component {
 
   render() {
     return (
-      <div ref={this.setNode} />
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+        }}
+        ref={this.setNode}
+      />
     );
   }
 }
