@@ -48,4 +48,6 @@ List of (all optional) props is as follows:
 * `onCityMouseOver` - a callback function when hovering over a city
 * `onCityMouseOut` - a callback function when stopping hovering over a city
 
+---
+
 Inspired by [this great tutorial](http://learningthreejs.com/blog/2013/09/16/how-to-make-the-earth-in-webgl/).
