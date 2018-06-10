@@ -4,7 +4,7 @@ This is a package to display an Earth via a React component.
 
 ![An image of the Earth rotating slowly](./assets/globe.gif)
 
-[View a live demo here](https://thekevinscott.github.io/react-earth/)
+[View a live demo here](https://thekevinscott.github.io/react-earth/).
 
 ## Installation
 

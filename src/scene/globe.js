@@ -147,7 +147,7 @@ export default async (_props, _camera, _node) => {
     globe.add(cloudMesh);
   }
 
-  if (props.cities) {
+  if (props.cities && props.cities.length) {
     dots = getCitiesGeometry(props);
     globe.add(dots);
   }
@@ -218,8 +218,10 @@ export const update = _props => {
       citySize: _props.citySize,
     })) {
       globe.remove(dots);
-      dots = getCitiesGeometry(props);
-      globe.add(dots);
+      if (props.cities && props.cities.length) {
+        dots = getCitiesGeometry(props);
+        globe.add(dots);
+      }
     }
     props = _props;
   }
