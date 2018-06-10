@@ -43,5 +43,9 @@ List of (all optional) props is as follows:
 * `textures.cloud` - a cloud map to overlay on the globe
 * `bumpScale` - the amount of extrusion for the bump map
 * `cloudOpacity` - the amount of opacity for the cloud layer
+* `cities` - a list of objects containing `lat` and `lng` points to display
+* `citySize` - the size of the city
+* `onCityMouseOver` - a callback function when hovering over a city
+* `onCityMouseOut` - a callback function when stopping hovering over a city
 
 Inspired by [this great tutorial](http://learningthreejs.com/blog/2013/09/16/how-to-make-the-earth-in-webgl/).

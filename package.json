@@ -1,7 +1,7 @@
 {
   "name": "react-earth",
   "description": "A visualization of the Earth in React",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/thekevinscott/react-earth",
   "license": "ISC",
   "main": "dist/index.js",
@@ -34,6 +34,7 @@
     "eslint-plugin-jsx-a11y": "5.1.1",
     "eslint-plugin-react": "7.4.0",
     "gh-pages": "^1.2.0",
+    "loose-json": "^1.1.2",
     "parcel": "^1.8.1",
     "prop-types": "^15.6.1"
   }

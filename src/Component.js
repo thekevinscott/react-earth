@@ -66,6 +66,9 @@ App.propTypes = {
   }),
   bumpScale: PropTypes.number,
   cloudOpacity: PropTypes.number,
+  onCityMouseOver: PropTypes.func,
+  onCityMouseOut: PropTypes.func,
+  citySize: PropTypes.number,
 };
 
 App.defaultProps = {
@@ -77,6 +80,9 @@ App.defaultProps = {
   textures: {},
   bumpScale: 0.05,
   cloudOpacity: 0.2,
+  onCityMouseOver: () => {},
+  onCityMouseOut: () => {},
+  citySize: 10,
 };
 
 export default App;

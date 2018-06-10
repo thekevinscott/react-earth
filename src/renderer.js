@@ -20,8 +20,8 @@ export default async (node, props) => {
   renderer.setSize(width, height);
   node.appendChild( renderer.domElement );
 
-  const scene = await getScene(addRenderer, props);
   camera = await getCamera(width, height);
+  const scene = await getScene(addRenderer, camera, props, node);
   render(() => {
     renderer.render(scene, camera);
   })();

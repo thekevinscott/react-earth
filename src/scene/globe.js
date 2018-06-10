@@ -7,6 +7,20 @@ import {
   DoubleSide,
   MeshBasicMaterial,
   MeshNormalMaterial,
+  Scene,
+  Raycaster,
+  Geometry,
+  Vector3,
+  Vector2,
+  Math as Math3,
+  PointsMaterial,
+  Points,
+  Color,
+  BoxGeometry,
+  BufferGeometry,
+  BufferAttribute,
+  ShaderMaterial,
+  TextureLoader,
 } from 'three';
 import {
   // loadTextureFromBuffer,
@@ -20,6 +34,7 @@ import {
 //   cloud: fs.readFileSync(__dirname + '/../../assets/earthcloudmap.jpg').buffer,
 // };
 
+const circle = require('../../assets/circle.png');
 const getDefaultTextures = ({ showClouds }) => {
   const defaultTextures = {
     map: 'https://thekevinscott.github.io/react-earth/assets/map.jpg',
@@ -51,11 +66,59 @@ let props;
 let material;
 let globe;
 let cloudMesh;
+let dots;
+let mouse;
+let camera;
+let GLOBE_INTERSECTED, CITY_INTERSECTED;
+let node;
+let raycaster, intersects;
 
-export default async (_props) => {
+const RADIUS = 0.4;
+
+function onDocumentMouseMove( event ) {
+  if (mouse) {
+    event.preventDefault();
+    const width = node.clientWidth;
+    const height = node.clientHeight;
+    mouse.x = ((event.clientX - node.offsetLeft) / width) * 2 - 1;
+    mouse.y = -((event.clientY - node.offsetTop) / height) * 2 + 1;
+  }
+}
+
+const getCitiesGeometry = (props) => {
+  const dotGeometry = new Geometry();
+  const sprite = new TextureLoader().load(circle);
+  const dotMaterial = new PointsMaterial({
+    size: props.citySize,
+    sizeAttenuation: false,
+    alphaTest: 0.5,
+    transparent: true,
+    map: sprite,
+  });
+
+  dotMaterial.color.setHSL(Math.random(), 0.5, 0.5);
+
+  props.cities.map(({ lat, lng }) => {
+    const cosLat = Math.cos(lat * Math.PI / 180.0);
+    const sinLat = Math.sin(lat * Math.PI / 180.0);
+    const cosLon = Math.cos(lng * Math.PI / 180.0);
+    const sinLon = Math.sin(lng * Math.PI / 180.0);
+    const x = (RADIUS * 1.025) * cosLat * cosLon;
+    const y = (RADIUS * 1.025) * cosLat * sinLon;
+    const z = (RADIUS * 1.025) * sinLat;
+    dotGeometry.vertices.push(new Vector3(x, y, z));
+  });
+
+  const points = new Points( dotGeometry, dotMaterial );
+  return points;
+};
+
+export default async (_props, _camera, _node) => {
+  camera = _camera;
+  node = _node;
   props = _props;
-  const size = 50;
-  const geometry = new SphereGeometry(0.5, size, size);
+  const slices = 50;
+  const geometry = new SphereGeometry(RADIUS, slices, slices);
   const {
     map,
     bumpMap,
@@ -72,7 +135,7 @@ export default async (_props) => {
   globe = new Mesh(geometry, material);
 
   if (props.showClouds) {
-    const cloudGeometry = new SphereGeometry(0.51, size, size)
+    const cloudGeometry = new SphereGeometry(RADIUS * 1.02, slices, slices)
     const cloudMaterial = new MeshPhongMaterial({
       map: cloud,
       side: DoubleSide,
@@ -84,11 +147,50 @@ export default async (_props) => {
     globe.add(cloudMesh);
   }
 
+  if (props.cities) {
+    dots = getCitiesGeometry(props);
+    globe.add(dots);
+  }
+
   const render = () => {
     const speed = props.speed / 1000;
-    globe.rotation.y -= speed;
+    if (!GLOBE_INTERSECTED) {
+      globe.rotation.y -= speed;
+    }
+
+    if (mouse.x > -1 && mouse.x < 1 && mouse.y > -1 && mouse.y < 1) {
+      raycaster.setFromCamera( mouse, camera );
+
+      GLOBE_INTERSECTED = raycaster.intersectObject(globe).length > 0;
+
+      intersects = raycaster.intersectObject(dots);
+      const intersecting = (intersects.filter(intersect => {
+        return intersect.distanceToRay < 0.01;
+      }).shift() || {}).index;
+
+
+      if (CITY_INTERSECTED !== intersecting) {
+        if (intersecting) {
+          props.onCityMouseOver(props.cities[intersecting]);
+        } else {
+          props.onCityMouseOut(props.cities[CITY_INTERSECTED]);
+        }
+        CITY_INTERSECTED = intersecting;
+      }
+    }
   };
+
+  document.removeEventListener( 'mousemove', onDocumentMouseMove);
+  document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+  raycaster = new Raycaster();
+  mouse = new Vector2();
+  const width = node.clientWidth;
+  const height = node.clientHeight;
+  mouse.x = ((event.clientX - node.offsetLeft) / width) * 2 - 1;
+  mouse.y = -((event.clientY - node.offsetTop) / height) * 2 + 1;
   return {
+    geometry,
     globe,
     render,
   };
@@ -96,6 +198,8 @@ export default async (_props) => {
 
 export const update = _props => {
   if (JSON.stringify(props) !== JSON.stringify(_props)) {
+    document.removeEventListener( 'mousemove', onDocumentMouseMove);
+    document.addEventListener( 'mousemove', onDocumentMouseMove, false );
     globe.material.bumpScale = props.bumpScale;
     cloudMesh.material.opacity = props.cloudOpacity;
     globe.material.needsUpdate = true;
@@ -104,6 +208,18 @@ export const update = _props => {
       globe.add(cloudMesh);
     } else if (props.showClouds === true && _props.showClouds === false) {
       globe.remove(cloudMesh);
+    }
+
+    if (JSON.stringify({
+      cities: props.cities,
+      citySize: props.citySize,
+    }) !== JSON.stringify({
+      cities: _props.cities,
+      citySize: _props.citySize,
+    })) {
+      globe.remove(dots);
+      dots = getCitiesGeometry(props);
+      globe.add(dots);
     }
     props = _props;
   }

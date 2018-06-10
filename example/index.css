@@ -65,6 +65,17 @@ input[type="checkbox"] {
   background: rgba(0,0,0,1);
 }
 
+#output {
+  border-top: 1px solid rgba(0,0,0,0.2);
+  padding: 10px;
+  margin-top: 10px;
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Mozilla, post millennium */
+  white-space: -pre-wrap; /* Opera 4-6 */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
 
 @media screen and (max-width: 760px) {
   #container {
@@ -79,5 +90,9 @@ input[type="checkbox"] {
   #controls {
     margin: 0 0 20px 0;
     width: 100%;
+  }
+
+  #output {
+    display: none;
   }
 }
