@@ -1,7 +1,7 @@
 {
   "name": "react-earth",
   "description": "A visualization of the Earth in React",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/thekevinscott/react-earth",
   "license": "ISC",
   "main": "dist/index.js",
