@@ -64,6 +64,7 @@ class Container extends Component {
       output: "",
       speed: 1,
       showClouds: true,
+      showCities: true,
       bumpScale: 0.05,
       cloudOpacity: 0.2,
       citySize: 15,
@@ -134,6 +135,11 @@ class Container extends Component {
             step: 0.01,
             value: this.state.cloudOpacity,
           }, {
+            name: "showCities",
+            label: "ShowCities",
+            type: "checkbox",
+            value: this.state.showCities,
+          }, {
             name: "citySize",
             label: "CitySize",
             type: "range",
@@ -152,7 +158,7 @@ class Container extends Component {
             showClouds={this.state.showClouds}
             bumpScale={Number(this.state.bumpScale)}
             cloudOpacity={Number(this.state.cloudOpacity)}
-            cities={cities}
+            cities={this.state.showCities ? cities : null}
             citySize={Number(this.state.citySize)}
             x={this.state.x}
             y={this.state.y}
