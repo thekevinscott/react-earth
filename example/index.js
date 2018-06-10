@@ -4,14 +4,16 @@ import ReactDOM from 'react-dom';
 
 const Controls = ({ controls, handleChange }) => {
   return (
-    <div id="controls">
-      {controls.map((control, key) => (
-        <Control
-          key={key}
-          control={control}
-          handleChange={handleChange}
-        />
-      ))}
+    <div id="controls-container">
+      <div id="controls">
+        {controls.map((control, key) => (
+          <Control
+            key={key}
+            control={control}
+            handleChange={handleChange}
+          />
+        ))}
+      </div>
     </div>
   );
 };
@@ -69,7 +71,7 @@ class Container extends Component {
 
   render() {
     return (
-      <div>
+      <div id="container">
         <Controls
           controls={[{
             name: "speed",

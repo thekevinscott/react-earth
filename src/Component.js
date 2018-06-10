@@ -21,7 +21,7 @@ class App extends Component {
     try {
       renderer(this.node, this.props);
     } catch(err) {
-      console.log('err', err);
+      console.error('err', err);
     }
   }
 
@@ -32,7 +32,6 @@ class App extends Component {
     } = nextProps;
 
     if (width !== this.props.width || height !== this.props.height) {
-      console.log('resize');
       resize(width, height);
     }
 
@@ -42,6 +41,7 @@ class App extends Component {
   render() {
     return (
       <div
+        className={this.props.className}
         style={{
           width: this.props.width || '100%',
           height: this.props.height || '100%',
@@ -56,6 +56,7 @@ App.propTypes = {
   width: PropTypes.number,
   height: PropTypes.number,
   speed: PropTypes.number,
+  className: PropTypes.string,
   showClouds: PropTypes.bool,
   textures: PropTypes.shape({
     map: PropTypes.string,
@@ -68,6 +69,7 @@ App.propTypes = {
 };
 
 App.defaultProps = {
+  className: "",
   width: null,
   height: null,
   showClouds: true,

@@ -22,9 +22,9 @@ import {
 
 const getDefaultTextures = ({ showClouds }) => {
   const defaultTextures = {
-    map: 'https://thekevinscott.github.io/react-earth/assets/earthmap1k.jpg',
-    bumpMap: 'https://thekevinscott.github.io/react-earth/assets/earthbump1k.jpg',
-    specular: 'https://thekevinscott.github.io/react-earth/assets/earthspec1k.jpg',
+    map: 'https://thekevinscott.github.io/react-earth/assets/map.jpg',
+    bumpMap: 'https://thekevinscott.github.io/react-earth/assets/bump.jpg',
+    specular: 'https://thekevinscott.github.io/react-earth/assets/spec.jpg',
   };
 
   if (showClouds) {

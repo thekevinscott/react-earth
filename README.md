@@ -2,9 +2,9 @@
 
 This is a package to display an Earth via a React component.
 
-Image of it working.
+![An image of the Earth rotating slowly](./assets/globe.gif)
 
-You can see a live example here.
+[View a live demo here](https://thekevinscott.github.io/react-earth/)
 
 ## Installation
 
@@ -34,6 +34,7 @@ List of (all optional) props is as follows:
 * `width` - the width of the canvas.
 * `height` - the height of the canvas.
 * `speed` - indicates the speed the globe should rotate at. 0 indicates no rotation. You can specify a negative rotation to rotate it backwards.
+* `className` - a class name to pass to the containing div
 * `showCloud` - whether to show clouds or not
 * `textures` - an object of custom textures to pass to the globe
 * `textures.map` - the main texture of the globe

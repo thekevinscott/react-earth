@@ -7,8 +7,11 @@
   "main": "dist/index.js",
   "scripts": {
     "run-example": "parcel example/index.html",
+    "build-example": "npm run clean && parcel build example/index.html --public-url /react-earth/",
     "clean": "rm -rf ./dist",
     "build": "npm run clean && parcel build src/index.js",
+    "copy-assets": "cp -r ./assets ./dist/assets",
+    "gh-pages": "npm run build-example && npm run copy-assets && gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Kevin Scott",
